@@ -1,0 +1,39 @@
+app-id: eu.annaaurora.find_billy.Find_Billy
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+base: org.godotengine.godot.BaseApp
+base-version: '4.3-24.08'
+sdk: org.freedesktop.Sdk
+command: godot-runner
+finish-args:
+  - "--share=ipc"
+  - "--socket=x11"
+  - "--socket=pulseaudio"
+  - "--device=dri"
+modules:
+  - name: Find-Billy
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 godot-runner.pck -t /app/bin/
+      - install -D LICENSE.md /app/bin/LICENSE.md
+      - tar xvf icons.tar.gz
+      - >
+        for icon_width in 32 64 128 160 256 320 512; do
+          install -D icons/usr/share/icons/hicolor/"$icon_width"x"$icon_width"/apps/find-billy.png /app/share/icons/hicolor/"$icon_width"x"$icon_width"/apps/eu.annaaurora.find_billy.Find_Billy.png
+        done
+      - install -D find-billy.desktop /app/share/applications/eu.annaaurora.find_billy.Find_Billy.desktop
+      - install -D eu.annaaurora.find_billy.Find_Billy.appdata.xml /app/share/metainfo/eu.annaaurora.find_billy.Find_Billy.appdata.xml
+    sources:
+      - type: archive
+        url: https://codeberg.org/annaaurora/Find-Billy/archive/v1.0.10.tar.gz
+        sha256: a334163881db48988fa725de8d10632d1b14aa336f6c3bcd4da6740524cac7d9
+      - type: patch
+        path: find-billy.desktop.patch
+      - type: file
+        url: https://codeberg.org/annaaurora/Find-Billy/releases/download/v1.0.10/godot-runner.pck
+        sha256: 684ca0508bbac66429f71861c8d105e9f2a8b99fdd91894c6ce897c9c496c4d1
+        dest-filename: godot-runner.pck
+      - type: file
+        url: https://codeberg.org/annaaurora/Find-Billy/releases/download/v1.0.10/icons.tar.gz
+        sha256: 29d4e2afed6c64583b4a385a08bc6238dc8046b89ceb6a14f6b852522a082b13
+        dest-filename: icons.tar.gz
